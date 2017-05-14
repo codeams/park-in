@@ -6,19 +6,19 @@
         <div class="col-md-4">
           <!--section-->
           <div class="reserve--card text-center">
-            <h1>parkme</h1>
+            <h1>PARK ME</h1>
             <div class="reserve--title">
               <h5>Estacionamiento en {{ features.address }}</h5>
               <h5>Horario: {{ features.schedule }}</h5>
             </div>
           <form>
-          <div class="form-group">
-            <h1>${{ features.price }} mxn</h1>
-            <p>
-              costo por hora
-            </p>
-          </div>
-        </form>
+            <div class="form-group">
+              <h1>${{ features.price }}.00 mxn</h1>
+              <p>
+                costo por hora
+              </p>
+            </div>
+          </form>
         </div>
 
         </div>
@@ -47,8 +47,15 @@
       <div class="row">
         <div class="col-sm-12 map--container">
           <form>
-          <a class="btn btn-primary btn-main" href="ticket.php">Reservar lugar</a>
-        </form>
+            <button @click.prevent='emitReserve()'
+              class="btn btn-primary btn-main">
+              {{ this.reserved ? 'Cancelar reserva' : 'Reservar'  }}
+            </button>
+            <button @click.prevent='emitCloseReserve()'
+              class="btn btn-secondary btn-main">
+              Regresar
+            </button>
+          </form>
         </div>
       </div>
 
@@ -64,7 +71,8 @@
     name: 'Reserve',
 
     props: [
-      'features'
+      'features',
+      'reserved'
     ],
 
     data () {
@@ -72,6 +80,10 @@
     },
 
     methods: {
+      emitReserve () {
+        Bus.$emit('reserve', this.features.id)
+      },
+
       emitCloseReserve () {
         Bus.$emit('closeReserve')
       }
@@ -97,7 +109,7 @@
 
   color: black;
   background-color: white;
-  
+
 }
 .reserve--characteristics .fa
 {

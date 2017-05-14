@@ -34,12 +34,13 @@ body
     background-color: #0c1531;
 }
 .btn {
-  background-color: #196eef;
   border: none;
-  background-color: #196eef;
   border: none;
   border-radius: 16px;
   padding: 10px 35px;
+}
+.btn-primary {
+  background-color: #196eef;
 }
 input{
   border-radius: 10px !important;

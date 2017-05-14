@@ -4,14 +4,14 @@
 
       <div class='row'>
         <div class='map--card text-center'>
-        <div class='col-sm-7 col-sm-offset-1'>
+          <div class='col-sm-7 col-sm-offset-1'>
 
-          <form>
-          <div class='form-group'>
-            <input type='text' class='form-control' id='destination' placeholder='A donde vas?'>
+            <form>
+              <div class='form-group'>
+                <input type='text' class='form-control' id='destination' placeholder='A donde vas?'>
+              </div>
+            </form>
           </div>
-        </form>
-        </div>
         </div>
         <div class="col-sm-4 text-center">
         <a class='btn btn-primary btn-main' href='reserve.php'>Buscar Lugar</a></div>
@@ -20,12 +20,12 @@
 
       <div class='row'>
         <div class='col-sm-12 map--container'>
-            <div id='map' style="height:650px"></div>
+          <div id='map' style="height:650px"></div>
         </div>
 
       </div>
 
-      <reserve v-if='showReserve' :features='parkFeatures'></reserve>
+      <reserve v-if='showReserve' :features='parkFeatures' :reserved='reserved'></reserve>
 
     </div>
   </div>
@@ -48,7 +48,8 @@
       return {
         database: Firebase.database(),
         showReserve: false,
-        parkFeatures: {}
+        parkFeatures: {},
+        reserved: false
       }
     },
 
@@ -58,6 +59,21 @@
       Bus.$on('closeReserve', () => {
         this.showReserve = false
         this.parkFeatures = {}
+      })
+
+      Bus.$on('reserve', (id) => {
+        let val = !this.parks[id].reserved
+
+        this.database.ref(`parks/${id}/reserved`).set(val)
+          .then(() => {
+            this.showReserve = false
+          }).catch((response) => {
+            console.error(response)
+          })
+      })
+
+      Bus.$on('closeReserve', () => {
+        this.showReserve = false
       })
     },
 
@@ -125,8 +141,9 @@
           marker.addListener('click', function () {
             infowindow.open(map, this)
             let features = _vue.parks[location.id].features
-            _vue.parkFeatures = features
+            _vue.parkFeatures = { id: location.id, ...features }
             _vue.showReserve = true
+            _vue.reserved = _vue.parks[location.id].reserved
           })
           if (this.parks[location.id].reserved === true) {
             marker.setIcon(markerPurple)
