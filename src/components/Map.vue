@@ -8,13 +8,13 @@
 
           <form>
           <div class='form-group'>
-            <input type='text' class='form-control' id='destination' placeholder='A donde vas?'>
+            <input v-model='location' type='text' @keyup.enter.stop.prevent='updateMap()' class='form-control' id='destination' placeholder='A donde vas?'>
           </div>
         </form>
         </div>
         </div>
         <div class="col-sm-4 text-center">
-        <a class='btn btn-primary btn-main' href='reserve.php'>Buscar Lugar</a></div>
+        <a class='btn btn-primary btn-main' @click='updateMap()'>Buscar Lugar</a></div>
 
       </div>
 
@@ -48,6 +48,7 @@
       return {
         database: Firebase.database(),
         showReserve: false,
+        location: '',
         parkFeatures: {}
       }
     },
@@ -74,6 +75,17 @@
     },
 
     methods: {
+      centerMap (map) {
+        let geocoder = new google.maps.Geocoder() // eslint-disable-line
+        if (this.location !== '') {
+          geocoder.geocode({ 'address': this.location }, function (results, status) {
+            if (status === 'OK') {
+              map.setCenter(results[0].geometry.location)
+            }
+          })
+        }
+      },
+
       updateMap () {
         let locations = []
 
@@ -104,6 +116,7 @@
             lng: -89.621127
           }
         })
+        this.centerMap(map)
 
         // Create an array of alphabetical characters used to label the markers.
         // let labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
