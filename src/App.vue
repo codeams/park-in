@@ -44,7 +44,14 @@ body
 }
 input{
   border-radius: 10px !important;
-  background-color: transparent !important;
+  /* background-color: transparent !important; */
   padding: 10px;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 300ms, transform 500ms;
+}
+.fade-enter, .fade-leave-to {
+  transform: translateY(40px);
+  opacity: 0;
 }
 </style>

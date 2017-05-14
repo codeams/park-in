@@ -8,15 +8,13 @@
           <div class="reserve--card text-center">
             <h1>PARK ME</h1>
             <div class="reserve--title">
-              <h5>Estacionamiento en {{ features.address }}</h5>
-              <h5>Horario: {{ features.schedule }}</h5>
+              <h3>{{ features.address }}</h3>
+              <h3>{{ features.schedule }}</h3>
             </div>
           <form>
             <div class="form-group">
-              <h1>${{ features.price }}.00 mxn</h1>
-              <p>
-                costo por hora
-              </p>
+              <h1>${{ features.price }}.00 MXN</h1>
+              <p>costo por hora</p>
             </div>
           </form>
         </div>
@@ -44,11 +42,16 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row text-center buttons">
         <div class="col-sm-12 map--container">
           <form>
             <button @click.prevent='emitReserve()'
-              class="btn btn-primary btn-main">
+              :class='{
+                "btn": true,
+                "btn-primary": reserved ? false : true,
+                "btn-warning": reserved ? true : false,
+                "btn-main": true
+                }'>
               {{ this.reserved ? 'Cancelar reserva' : 'Reservar'  }}
             </button>
             <button @click.prevent='emitCloseReserve()'
@@ -99,6 +102,7 @@
 }
 .reserve
 {
+  z-index: 1001;
   position: fixed;
   top: 0;
   left: 0;

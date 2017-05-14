@@ -6,15 +6,13 @@
         <div class='map--card text-center'>
           <div class='col-sm-7 col-sm-offset-1'>
 
-            <form>
-              <div class='form-group'>
-                <input type='text' class='form-control' id='destination' placeholder='A donde vas?'>
-              </div>
-            </form>
+          <div class='form-group'>
+            <input v-model='location' type='text' @keyup.enter='updateMap()' class='form-control' id='destination' placeholder='A donde vas?'>
           </div>
         </div>
         <div class="col-sm-4 text-center">
-        <a class='btn btn-primary btn-main' href='reserve.php'>Buscar Lugar</a></div>
+          <a class='btn btn-primary btn-main' @click='updateMap()'>Buscar Lugar</a></div>
+        </div>
 
       </div>
 
@@ -25,7 +23,9 @@
 
       </div>
 
-      <reserve v-if='showReserve' :features='parkFeatures' :reserved='reserved'></reserve>
+      <transition name='fade'>
+        <reserve v-if='showReserve' :features='parkFeatures' :reserved='reserved'></reserve>
+      </transition>
 
     </div>
   </div>
@@ -49,7 +49,8 @@
         database: Firebase.database(),
         showReserve: false,
         parkFeatures: {},
-        reserved: false
+        reserved: false,
+        location: ''
       }
     },
 
@@ -90,6 +91,17 @@
     },
 
     methods: {
+      centerMap (map) {
+        let geocoder = new google.maps.Geocoder() // eslint-disable-line
+        if (this.location !== '') {
+          geocoder.geocode({ 'address': this.location }, function (results, status) {
+            if (status === 'OK') {
+              map.setCenter(results[0].geometry.location)
+            }
+          })
+        }
+      },
+
       updateMap () {
         let locations = []
 
@@ -120,6 +132,7 @@
             lng: -89.621127
           }
         })
+        this.centerMap(map)
 
         // Create an array of alphabetical characters used to label the markers.
         // let labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -139,7 +152,7 @@
           // Adding listener to marker on click event
           let _vue = this
           marker.addListener('click', function () {
-            infowindow.open(map, this)
+            // infowindow.open(map, this)
             let features = _vue.parks[location.id].features
             _vue.parkFeatures = { id: location.id, ...features }
             _vue.showReserve = true
@@ -193,5 +206,10 @@
   width: 100%;
   margin-top: -25px;
   height: 650px;
+}
+
+.form-control {
+  background-color: white;
+  color: #196eef;
 }
 </style>
