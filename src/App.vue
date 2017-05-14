@@ -22,7 +22,7 @@ export default {
 
 body
 {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 
     position: relative;
 
@@ -46,6 +46,9 @@ input{
   border-radius: 10px !important;
   /* background-color: transparent !important; */
   padding: 10px;
+}
+.buttons {
+  margin-top: 15px;
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 300ms, transform 500ms;

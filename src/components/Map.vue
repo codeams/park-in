@@ -126,7 +126,7 @@
         let theMap = $('#map')[0] // eslint-disable-line
 
         let map = new google.maps.Map(theMap, { // eslint-disable-line
-          zoom: 18,
+          zoom: 16,
           center: {
             lat: 20.974799,
             lng: -89.621127
