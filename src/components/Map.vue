@@ -1,24 +1,28 @@
 <template lang='html'>
   <div class='map'>
-    <div class='container'>
+    <div class='container-fluid'>
 
-      <div class='row justify-content-center'>
-        <div class='col-md-4'>
-          <div class='map--card text-center'>
+      <div class='row'>
+        <div class='map--card text-center'>
+        <div class='col-sm-7 col-sm-offset-1'>
+
           <form>
           <div class='form-group'>
-            <input type='text' class='form-control' id='destination' placeholder='Catedral, Merida Centro'>
+            <input type='text' class='form-control' id='destination' placeholder='A donde vas?'>
           </div>
-          <a class='btn btn-primary btn-main' href='reserve.php'>Reservar lugar</a>
         </form>
         </div>
         </div>
+        <div class="col-sm-4 text-center">
+        <a class='btn btn-primary btn-main' href='reserve.php'>Buscar Lugar</a></div>
+
       </div>
 
       <div class='row'>
-        <div class='col-md-12 map--container'>
-            <div id='map'></div>
+        <div class='col-sm-12 map--container'>
+            <div id='map' style="height:650px"></div>
         </div>
+
       </div>
 
       <reserve v-if='showReserve' :features='parkFeatures'></reserve>
@@ -28,6 +32,10 @@
 </template>
 
 <script>
+  import markerBlue from '@/assets/marker_blue.png'
+  import markerPurple from '@/assets/marker_purple.png'
+  import Bus from '@/Bus'
+
   import Firebase from 'firebase'
   import { mapGetters, mapActions } from 'vuex'
 
@@ -45,11 +53,12 @@
     },
 
     created () {
-      setTimeout(() => {
-        this.updateMap()
-      }, 5000)
-
       this.setParksRef(this.database.ref('parks'))
+
+      Bus.$on('closeReserve', () => {
+        this.showReserve = false
+        this.parkFeatures = {}
+      })
     },
 
     computed: {
@@ -89,7 +98,7 @@
         let theMap = $('#map')[0] // eslint-disable-line
 
         let map = new google.maps.Map(theMap, { // eslint-disable-line
-          zoom: 15,
+          zoom: 18,
           center: {
             lat: 20.974799,
             lng: -89.621127
@@ -119,7 +128,11 @@
             _vue.parkFeatures = features
             _vue.showReserve = true
           })
-
+          if (this.parks[location.id].reserved === true) {
+            marker.setIcon(markerPurple)
+          } else {
+            marker.setIcon(markerBlue)
+          }
           marker.setMap(map)
         })
       },
@@ -138,10 +151,19 @@
 <style>
 .map--card
 {
-    padding-top: 10%;
+    padding-top: 25px;
     padding-right: 15px;
     padding-left: 15px;
-    height: 30vh;
+
+}
+.map--card form {
+  padding-bottom: 15px;
+}
+
+.btn{
+  margin-bottom: 15px;
+  z-index: 100;
+  position: relative;
 }
 
 .map--container
@@ -152,6 +174,7 @@
 
 #map {
   width: 100%;
-  height: 100%;
+  margin-top: -25px;
+  height: 650px;
 }
 </style>

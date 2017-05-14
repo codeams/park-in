@@ -24,19 +24,19 @@
         </div>
       </div>
       <div class="reserve--characteristics row">
-        <div class="col-4 text-center">
+        <div class="col-xs-4 text-center">
           <i class="fa fa-wheelchair" aria-hidden="true"></i>
           <p>
             Dirlaskdmaslk
           </p>
         </div>
-        <div class="col-4 text-center">
+        <div class="col-xs-4 text-center">
           <i class="fa fa-video-camera" aria-hidden="true"></i>
           <p>
             Lorem ipsum dolor sit ame
           </p>
         </div>
-        <div class="col-4 text-center">
+        <div class="col-xs-4 text-center">
           <i class="fa fa-columns" aria-hidden="true"></i>
           <p>
             Lorem ipsum dolor sit ame
@@ -58,6 +58,8 @@
 </template>
 
 <script>
+  import Bus from '@/Bus'
+
   export default {
     name: 'Reserve',
 
@@ -67,6 +69,12 @@
 
     data () {
       return {}
+    },
+
+    methods: {
+      emitCloseReserve () {
+        Bus.$emit('closeReserve')
+      }
     }
   }
 </script>
@@ -84,11 +92,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  margin: 20px;
   padding: 25px;
+  border: 10px solid #0c1531;
 
   color: black;
   background-color: white;
+  
 }
 .reserve--characteristics .fa
 {

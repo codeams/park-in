@@ -31,6 +31,19 @@ body
     color: white;
     background: rgb(36, 43, 66);
     /* background-image: url('~assets/background-blue.png'); */
-    background-color: #222;
+    background-color: #0c1531;
+}
+.btn {
+  background-color: #196eef;
+  border: none;
+  background-color: #196eef;
+  border: none;
+  border-radius: 16px;
+  padding: 10px 35px;
+}
+input{
+  border-radius: 10px !important;
+  background-color: transparent !important;
+  padding: 10px;
 }
 </style>
